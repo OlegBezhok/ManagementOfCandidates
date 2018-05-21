@@ -1,0 +1,101 @@
+﻿<h1>Список Кандидатов</h1>
+<input type="button" value="Добавить" class="btn btn-default" (click)="add()" />
+<div class='row'>
+    <div class='col-md-4'>
+        Filter by:
+        <input type='text' [(ngModel)]='ListTitleFilter' />
+        <select [(ngModel)]="filterTitle">
+            <option>fullName</option>
+            <option>age</option>
+            <option>salary</option>
+            <option>experience</option>
+        </select>
+    </div>
+
+    <div class='col-md-2'>
+        <button class="btn btn-primary" (click)='arraySort()'>Sort by</button>
+        <select [(ngModel)]="titleSort">
+            <option>fullName</option>
+            <option>age</option>
+            <option>salary</option>
+            <option>experience</option>
+        </select>
+    </div>
+</div>
+<table *ngIf="tableMode; else create" class="table table-striped">
+    <thead>
+        <tr>
+            <td>Full Name</td>
+            <td>Age</td>
+            <td>Salary</td>
+            <td>Experience</td>
+            <td>Resume</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let c of filteredFullName">
+            <ng-template [ngIf]="candidate?.id != c.id" [ngIfElse]="edit">
+                <td>{{c?.fullName}}</td>
+                <td>{{c?.age}}</td>
+                <td>{{c?.salary | currency:'USD':true:'1.2-2'}}</td>
+                <td>{{c?.experience}}</td>
+                <td>{{c?.path}}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" (click)="editCandidate(c)">Изменить</button>
+                    <button class="btn btn-sm btn-danger" (click)="delete(c)">Удалить</button>
+                </td>
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+
+<ng-template #edit>
+    <td>
+        <input type="text" [(ngModel)]="candidate.fullName" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="candidate.age" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="candidate.salary" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="candidate.experience" class="form-control" />
+    </td>
+    <td>
+        <input type="button" value="Сохранить" (click)="save()" class="btn btn-sm btn-success" />
+        <input type="button" value="Отмена" (click)="cancel()" class="btn btn-sm btn-warning" />
+    </td>
+</ng-template>
+
+<ng-template #create>
+    <form #createForm="ngForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>FullName</label>
+            <input class="form-control" name="fullName" [(ngModel)]="candidate.fullName" required />
+        </div>
+        <div class="form-group">
+            <label>age</label>
+            <input class="form-control" name="age" [(ngModel)]="candidate.age" required pattern="\d*" />
+        </div>
+        <div class="form-group">
+            <label>salary</label>
+            <input class="form-control" name="salary" [(ngModel)]="candidate.salary" required pattern="\d*" />
+        </div>
+        <div class="form-group">
+            <label>experience</label>
+            <input class="form-control" name="experience" [(ngModel)]="candidate.experience" required pattern="\d*" />
+        </div>
+
+        <div class="form-group">
+            <label>Resume</label>
+            <input type="file" name="path" [(ngModel)]="candidate.path" />
+        </div>
+
+        <div class="form-group">
+            <button [disabled]="createForm.invalid" class="btn btn-primary" (click)="save(createForm)">Сохранить</button>
+            <input type="button" value="Отмена" (click)="cancel()" class="btn btn-warning" />
+        </div>
+    </form>
+</ng-template>
+

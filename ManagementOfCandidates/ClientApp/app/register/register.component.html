@@ -1,0 +1,18 @@
+﻿<div class="container">
+    <form #registerForm="ngForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Login</label>
+            <input class="form-control" name="userName" [(ngModel)]="user.UserName" required />
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input class="form-control" type="password" name="Password" [(ngModel)]="user.Password" required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" />
+        </div>
+
+        <div class="form-group">
+            <button [disabled]="registerForm.invalid" class="btn btn-primary" (click)="registrationUser(registerForm)">Сохранить</button>
+            <button mat-button routerLink="/listCandidate" class="btn btn-warning">Cansel</button>
+        </div>
+    </form>
+</div>
